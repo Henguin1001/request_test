@@ -19,7 +19,6 @@ var request = require('request-promise');
 var async = require('async');
 function single(ip_address,cb){
   var url = 'http://'+ip_address+'/command';
-  url = "https://ptsv2.com/t/23wnj-1551885352/post";
   var options = {
       method: 'POST',
       headers: {'content-type' : 'application/x-www-form-urlencoded'},
