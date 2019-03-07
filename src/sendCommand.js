@@ -15,7 +15,7 @@ example return:
 */
 
 
-var request = require('request-promise');
+var request = require('request');
 var async = require('async');
 function single(ip_address,cb){
   var url = 'http://'+ip_address+'/command';
@@ -36,7 +36,12 @@ function bulk(ip_addresses,rate,cb){
 function bulkPrinter(printers, rate, cb){
   async.mapSeries(printers,function iterator(printer,icb){
     setTimeout(single, rate, printer.ip_address, function(err,body){
-      printer.body = body;
+      if(err){
+        printer.found = false;
+      } else {
+        printer.found = true;
+        printer.body = body;
+      }
       icb(err,printer);
     });
   },cb);
