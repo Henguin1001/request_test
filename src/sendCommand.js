@@ -32,7 +32,14 @@ function bulk(ip_addresses,rate,cb){
   async.mapSeries(ip_addresses,function iterator(ip_address,icb){
     setTimeout(single, rate, ip_address,icb);
   },cb)
-
+}
+function bulkPrinter(printers, rate, cb){
+  async.mapSeries(printers,function iterator(printer,icb){
+    setTimeout(single, rate, printer.ip_address, function(err,body){
+      printer.body = body;
+      icb(err,printer);
+    });
+  },cb);
 }
 
-module.exports = {single:single,bulk:bulk};
+module.exports = {single:single,bulk:bulk,bulkPrinter:bulkPrinter};
