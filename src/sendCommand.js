@@ -38,11 +38,12 @@ function bulkPrinter(printers, rate, cb){
     setTimeout(single, rate, printer.ip_address, function(err,body){
       if(err){
         printer.found = false;
+        icb(null,printer);
       } else {
         printer.found = true;
         printer.body = body;
+        icb(err,printer);
       }
-      icb(err,printer);
     });
   },cb);
 }
