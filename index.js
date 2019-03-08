@@ -13,9 +13,10 @@ var printers = [
   // {id:"14",ip_address:"128.186.51.233"},
   // {id:"15",ip_address:"128.186.51.177"}
 ];
-var dbh = new DBHandler(credentials.username,credentials.password,"test","prints");
+var dbh = new DBHandler(credentials.username,credentials.password,"test","devices");
 dbh.connect(err=>{
   if(!err) sendCommand.bulkPrinter(printers,500,function(err,res){
+    console.log(res);
     dbh.postData(res, err=>{
       if(err) console.error(err);
       dbh.disconnect();
