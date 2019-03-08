@@ -14,8 +14,9 @@ class DBHandler {
     this.client.close();
   }
   postData(data,cb){
+      data.access_time = new Date();
       const collection = this.client.db(this.db).collection(this.collection);
-      collection.insertMany(data, function(err, res) {
+      collection.insert(data, function(err, res) {
         if (err) throw err;
         console.log("1 document inserted");
         cb(err,res);
@@ -28,11 +29,18 @@ class DBHandler {
       cb(err, result);
     });
   }
-  removeOld(){
+  getRecentData(limit, cb){
+    const collection = this.client.db(this.db).collection(this.collection);
+    collection.find({}).sort({_id:1}).limit(limit).toArray(function(err, result) {
+      if (err) throw err;
+      cb(err, result);
+    });
+  }
+  removeOld(cb){
     var date = new Date();
     date.setDate(date.getDate() - 1);
     const collection = this.client.db(this.db).collection(this.collection);
-    collection.remove( { access_time : {"$lt" : date} })
+    collection.remove( { access_time : {"$lt" : date} },cb)
   }
 }
 module.exports = DBHandler;
