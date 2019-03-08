@@ -41,7 +41,7 @@ function bulkPrinter(printers, rate, cb){
         icb(null,printer);
       } else {
         printer.found = true;
-        printer.body = body;
+        printer.body = JSON.parse(body);
         icb(err,printer);
       }
     });
