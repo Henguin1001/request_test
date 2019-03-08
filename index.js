@@ -15,11 +15,15 @@ var printers = [
 ];
 var dbh = new DBHandler(credentials.username,credentials.password,"test","devices");
 dbh.connect(err=>{
-  if(!err) sendCommand.bulkPrinter(printers,500,function(err,res){
-    console.log(res);
-    dbh.postData(res, err=>{
-      if(err) console.error(err);
-      dbh.disconnect();
+  if(!err) {
+    sendCommand.bulkPrinter(printers,500,function(err,res){
+      console.log(res);
+      dbh.postData(res, err=>{
+        if(err) console.error(err);
+        dbh.disconnect();
+      });
     });
-  });
+  } else {
+    throw err;
+  }
 });
