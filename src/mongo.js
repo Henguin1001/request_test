@@ -15,7 +15,7 @@ class DBHandler {
   }
   postData(data,cb){
       const collection = this.client.db(this.db).collection(this.collection);
-      collection.insert(data, function(err, res) {
+      collection.insertMany(data, function(err, res) {
         if (err) throw err;
         console.log("1 document inserted");
         cb(err,res);
@@ -27,6 +27,12 @@ class DBHandler {
       if (err) throw err;
       cb(err, result);
     });
+  }
+  removeOld(){
+    var date = new Date();
+    date.setDate(date.getDate() - 1);
+    const collection = this.client.db(this.db).collection(this.collection);
+    collection.remove( { access_time : {"$lt" : date} })
   }
 }
 module.exports = DBHandler;
