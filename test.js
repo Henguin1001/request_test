@@ -6,7 +6,7 @@ var credentials = require('./credentials.secret.json');
 
 var dbh = new DBHandler(credentials.username,credentials.password,"test","prints");
 dbh.connect(err=>{
-  dbh.getData((err,res)=>{
+  dbh.getRecentData(3,(err,res)=>{
     console.log(res);
     dbh.disconnect();
   });

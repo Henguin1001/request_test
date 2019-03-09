@@ -16,14 +16,40 @@ var printers = [
 var dbh = new DBHandler(credentials.username,credentials.password,"test","prints");
 dbh.connect(err=>{
   if(!err) {
-    sendCommand.bulkPrinter(printers,500,function(err,res){
-      console.log(res);
-      dbh.postData(res, err=>{
-        if(err) console.error(err);
-        dbh.disconnect();
+    setInterval(function update(){
+      sendCommand.bulkPrinter(printers,300,function(err,res){
+        console.log(res);
+        dbh.postData(res, err=>{
+          if(err) console.error(err);
+        });
       });
-    });
+    },10000);
+    setInterval(function collect(){
+      dbh.removeOld()
+    },100000);
   } else {
     throw err;
   }
 });
+
+process.stdin.resume();//so the program will not close instantly
+
+function exitHandler(options, exitCode) {
+    dbh.disconnect();
+    if (options.cleanup) console.log('clean');
+    if (exitCode || exitCode === 0) console.log(exitCode);
+    if (options.exit) process.exit();
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+
+// catches "kill pid" (for example: nodemon restart)
+process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
+process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));

@@ -16,7 +16,7 @@ class DBHandler {
   postData(data,cb){
       data.access_time = new Date();
       const collection = this.client.db(this.db).collection(this.collection);
-      collection.insert(data, function(err, res) {
+      collection.insertMany(data, function(err, res) {
         if (err) throw err;
         console.log("1 document inserted");
         cb(err,res);
