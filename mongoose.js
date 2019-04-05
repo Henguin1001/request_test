@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var sendCommand = require('./src/sendCommand.js');
+
 var credentials = require('./credentials.secret.json');
 mongoose.connect("mongodb+srv://"+credentials.username+":"+ credentials.password +"@cluster0-qwocw.mongodb.net/"+db+"?retryWrites=true", {useNewUrlParser: true});
 
